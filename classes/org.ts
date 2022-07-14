@@ -11,7 +11,7 @@ export default class {
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CHfOrg Add'}, ...err})
+            throw ({...{err: 7001000, msg: 'COrg Add'}, ...err})
         }
     }
 
@@ -25,22 +25,19 @@ export default class {
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CHfOrg GetById'}, ...err})
+            throw ({...{err: 7001000, msg: 'COrg GetById'}, ...err})
         }
     }
 
-    static async Get ( fields, params ) {
+    static async Get ( fields ) {
         try {
             let collection = DB.Client.collection('org')
 
-            if (!fields.contract)
-                return await collection.find({}).limit(params.count).skip(params.offset).toArray()
-
-            return await collection.aggregate().toArray();
+            return await collection.find().limit(fields.count+fields.offset).skip(fields.offset).toArray()
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CHfOrg Get'}, ...err})
+            throw ({...{err: 7001000, msg: 'COrg Get'}, ...err})
         }
     }
 }
