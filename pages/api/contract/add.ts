@@ -1,7 +1,8 @@
 import Joi from "joi"
+import DbConnect from "../../../util/DbConnect"
 import CContract from "../../../classes/contract"
 
-export  default async (req, res) => {
+export default async function handler(req, res) {
     let value
     try {
         try {
@@ -28,6 +29,7 @@ export  default async (req, res) => {
             throw ({err: 412, msg: 'Неверные параметры'})
         }
         try {
+            await DbConnect()
             let result = await CContract.Add ( value )
 
             res.status(200).json({

@@ -8,9 +8,8 @@ export default async function handler(req, res) {
         try {
             //схема
             const schema = Joi.object({
-                offset: Joi.number().integer().min(0).max(9223372036854775807).allow(null).empty('').default(0),
-                count: Joi.number().integer().min(0).max(200).allow(null).empty('').default(20)
-            });
+                ids: Joi.string().min(24).max(24).required(),
+            })
 
             value = await schema.validateAsync(req.query)
 
@@ -21,17 +20,14 @@ export default async function handler(req, res) {
         try {
             await DbConnect()
 
-            let arFields = {
-                offset: value.offset,
-                count: value.count
+            let fields = {
+                _id: value.ids
             }
-            let result = await COrg.Get (arFields)
+            //let result = await COrg.GetById (fields)
 
             res.status(200).json({
                 code: 0,
-                response: {
-                    items: result
-                }
+                //response: result[0]
             })
         } catch (err) {
             throw ({...{code: 10000000, msg: 'Ошибка формирования результата'}, ...err})

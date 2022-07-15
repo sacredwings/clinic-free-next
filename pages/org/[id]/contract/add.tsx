@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import axios from "axios"
-import TemplatesMain from "../../components/template/main"
+import TemplatesMain from "../../../../components/template/main"
 
 export default function ({id}) {
     const formDefault = {
@@ -73,19 +73,10 @@ export default function ({id}) {
                         <div className="col-sm-10"><input type="date" className="form-control" id="date_to" value={form.date_to} onChange={onChangeText}/></div>
                     </div>
 
-
-                    <div className="mb-3 row">
-                        <label htmlFor="type" className="col-sm-2 col-form-label">Тип расчета</label>
-                        <div className="col-sm-10">
-                            {ListType()}
-                        </div>
-                    </div>
-
                     <div className="mb-3 row">
                         <label htmlFor="price" className="col-sm-2 col-form-label">Цена за человека</label>
                         <div className="col-sm-10"><input type="text" className="form-control" id="price" value={form.price} onChange={onChangeText}/></div>
                     </div>
-
 
                     <button type="submit" className="btn btn-primary">Добавить</button>
 
@@ -113,7 +104,6 @@ export default function ({id}) {
 
 }
 export async function getServerSideProps ({query, req}) {
-
     return {
         props: {
             id: query.id
