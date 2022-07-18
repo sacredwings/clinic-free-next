@@ -1,5 +1,4 @@
-//import {DB} from "social-framework/build/classes/db"
-import {DB} from "../../social-framework/src/classes/db"
+import {DB} from "social-framework"
 
 export default class {
 

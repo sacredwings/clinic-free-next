@@ -1,4 +1,4 @@
-import { DB }  from "../../social-framework/src/classes/db"
+import { DB }  from "social-framework"
 
 export default async function () {
     //конект

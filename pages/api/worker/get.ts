@@ -1,6 +1,6 @@
 import Joi from "joi"
 import DbConnect from "../../../util/DbConnect"
-import CContract from "../../../classes/contract"
+//import CWorker from "../../../classes/worker"
 
 export default async function handler(req, res) {
     let value
@@ -8,7 +8,7 @@ export default async function handler(req, res) {
         try {
             //схема
             const schema = Joi.object({
-                org_id: Joi.string().min(24).max(24).required(),
+                contract_id: Joi.string().min(24).max(24).required(),
 
                 offset: Joi.number().integer().min(0).max(9223372036854775807).allow(null).empty('').default(0),
                 count: Joi.number().integer().min(0).max(200).allow(null).empty('').default(20)
@@ -18,28 +18,28 @@ export default async function handler(req, res) {
 
         } catch (err) {
             console.log(err)
-            throw ({code: 412, msg: 'Неверные параметры'})
+            throw ({err: 412, msg: 'Неверные параметры'})
         }
         try {
             await DbConnect()
             let arFields = {
-                org_id: value.org_id,
+                contract_id: value.contract_id,
                 offset: value.offset,
                 count: value.count
             }
-            let result = await CContract.Get (arFields)
+            //let result = await CWorker.Get (arFields)
 
             res.status(200).json({
-                code: 0,
+                err: 0,
                 response: {
-                    items: result
+                    items: []//result
                 }
             })
         } catch (err) {
-            throw ({...{code: 10000000, msg: 'Ошибка формирования результата'}, ...err})
+            throw ({...{err: 10000000, msg: 'Ошибка формирования результата'}, ...err})
         }
     } catch (err) {
-        res.status(200).json({...{code: 10000000, msg: 'RContract Add'}, ...err})
+        res.status(200).json({...{err: 10000000, msg: 'RWorker Get'}, ...err})
     }
 }
 

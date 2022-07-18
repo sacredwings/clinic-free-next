@@ -16,20 +16,20 @@ export  default async (req, res) => {
 
         } catch (err) {
             console.log(err)
-            throw ({err: 412, msg: 'Неверные параметры'})
+            throw ({code: 412, msg: 'Неверные параметры'})
         }
         try {
             let result = await CContractType.Add ( value )
 
             res.status(200).json({
-                err: 0,
+                code: 0,
                 response: true//result
             })
         } catch (err) {
-            throw ({...{err: 10000000, msg: 'Ошибка формирования результата'}, ...err})
+            throw ({...{code: 10000000, msg: 'Ошибка формирования результата'}, ...err})
         }
     } catch (err) {
-        res.status(200).json({...{err: 10000000, msg: 'RContractType Add'}, ...err})
+        res.status(200).json({...{code: 10000000, msg: 'RContractType Add'}, ...err})
     }
 }
 

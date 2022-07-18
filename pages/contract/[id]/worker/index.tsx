@@ -21,10 +21,10 @@ export default function ({id}) {
 
     //список договоров
     const Get = async (start) => {
-        const url = '/api/contract/get'
+        const url = '/api/worker/get'
         let fields = {
             params: {
-                org_id: id,
+                contract_id: id,
                 offset: request.items.length,
                 count: request.step
             }
@@ -49,7 +49,7 @@ export default function ({id}) {
     const List = (arList) => {
         return <div className="list-group">
             {arList.map((list, i) => {
-                let href = `/contract/${id}/worker`
+                let href = `/contract/${id}/user`
                 return <Link href={href} key={i}><a className="list-group-item list-group-item-action">
                     {list.name}
                 </a></Link>
@@ -59,8 +59,8 @@ export default function ({id}) {
 
     return <TemplatesMain title={'Главная страница'}>
         <h1>{(org) ? org.name : null}</h1>
-        <p><Link href={`/org/${id}/contract/add`}><a className="btn btn-success btn-sm" role="button">Добавить договор</a></Link></p>
-        <p>Договора организаци: </p>
+        <p><Link href={`/contract/${id}/worker/add`}><a className="btn btn-success btn-sm" role="button">Добавить работника</a></Link></p>
+        <p>Рабочие: </p>
         {(list.length) ? List(list) : null}
     </TemplatesMain>
 }

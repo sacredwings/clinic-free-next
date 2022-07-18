@@ -1,16 +1,18 @@
-import {DB} from "../../social-framework/src/classes/db"
+import {DB} from "social-framework"
 
 export default class {
 
     static async Add ( fields ) {
         try {
+            fields.org_id = new DB().ObjectID(fields.org_id)
+
             let collection = DB.Client.collection('contract')
             await collection.insertOne(fields)
             return fields
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CHfOrg Add'}, ...err})
+            throw ({...{err: 7001000, msg: 'CContract Add'}, ...err})
         }
     }
 
@@ -24,7 +26,7 @@ export default class {
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CHfOrg GetById'}, ...err})
+            throw ({...{err: 7001000, msg: 'CContract GetById'}, ...err})
         }
     }
 
@@ -33,10 +35,14 @@ export default class {
             fields.org_id = new DB().ObjectID(fields.org_id)
 
             let collection = DB.Client.collection('contract')
-            return await collection.find(fields).limit(fields.count).skip(fields.offset).toArray()
+
+            let arFields = {
+                org_id: fields.org_id
+            }
+            return await collection.find(arFields).limit(fields.count).skip(fields.offset).toArray()
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CHfOrg Get'}, ...err})
+            throw ({...{err: 7001000, msg: 'CContract Get'}, ...err})
         }
     }
 }

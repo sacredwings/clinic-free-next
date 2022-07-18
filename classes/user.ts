@@ -1,16 +1,16 @@
-import {DB} from "social-framework"
+import {DB} from "social-framework/src/classes/db"
 
 export default class {
 
     static async Add ( fields ) {
         try {
-            let collection = DB.Client.collection('org')
+            let collection = DB.Client.collection('user')
             await collection.insertOne(fields)
             return fields
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CWorker Add'}, ...err})
+            throw ({...{err: 7001000, msg: 'CUser Add'}, ...err})
         }
     }
 
@@ -18,31 +18,27 @@ export default class {
         try {
             fields._id = new DB().ObjectID(fields._id)
 
-            let collection = DB.Client.collection('org')
+            let collection = DB.Client.collection('user')
             let result = await collection.find(fields).toArray()
             return result
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CWorker GetById'}, ...err})
+            throw ({...{err: 7001000, msg: 'CUser GetById'}, ...err})
         }
     }
 
     static async Get ( fields ) {
         try {
-            fields.contract_id = new DB().ObjectID(fields.contract_id)
-
-            let collection = DB.Client.collection('org')
-            let arFields = {
-                contract_id: fields.contract_id
-            }
+            let collection = DB.Client.collection('user')
+            let arFields = {}
             return await collection.find(arFields).limit(fields.count).skip(fields.offset).toArray()
 
             return await collection.aggregate().toArray();
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CWorker Get'}, ...err})
+            throw ({...{err: 7001000, msg: 'CUser Get'}, ...err})
         }
     }
 }

@@ -38,7 +38,6 @@ export default function ({id}) {
         fields.org_id = id
 
         let result = await axios.post(url, fields)
-
         if (result.data.code)
             setFormResult(false)
         else
