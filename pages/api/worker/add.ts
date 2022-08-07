@@ -1,7 +1,7 @@
 import Joi from "joi"
 import CWorker from "../../../classes/worker"
 
-export  default async (req, res) => {
+export default async (req, res) => {
     let value
     try {
         try {
