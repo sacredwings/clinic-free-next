@@ -4,6 +4,7 @@ import CContract from "../../../classes/contract"
 import CHf from "../../../classes/hf"
 import CResearch from "../../../classes/research"
 import CSpecialist from "../../../classes/specialist"
+import CUser from "../../../classes/user"
 
 export default async (req, res) => {
     let value
@@ -59,7 +60,7 @@ export default async (req, res) => {
             throw ({code: 412, msg: 'Неверные параметры'})
         }
         try {
-            let price = null
+            let price = 0
             let arResearch = []
             let arSpecialist = []
 
@@ -78,14 +79,25 @@ export default async (req, res) => {
             }
 
             //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ОБЩИХ
-            console.log(arHf)
+            //нет кода
 
-            //Оставляем уникальные
-            arResearch = await CResearch.GetById (arResearch)
-            arSpecialist = await CSpecialist.GetById (arSpecialist)
+            //Оставляем уникальные с прайсами
+            arResearch = await CResearch.GetByIdPrice (arResearch)
+            arSpecialist = await CSpecialist.GetByIdPrice (arSpecialist)
 
             console.log(arResearch)
             console.log(arSpecialist)
+
+            for (let item of arResearch) {
+                if ((item._price) && (item._price[0]))
+                    price += item._price[0].price
+            }
+            for (let item of arSpecialist) {
+                if ((item._price) && (item._price[0]))
+                    price += item._price[0].price
+            }
+
+            console.log(price)
 
             /*
             //достаем цену
@@ -103,6 +115,7 @@ export default async (req, res) => {
 
             arResearch = await CHfResearch.GetById (arResearch)
             arSpecialist = await CHfSpecialist.GetById (arSpecialist)
+*/
 
             let fields = {
                 first_name: value.first_name,
@@ -138,7 +151,8 @@ export default async (req, res) => {
                 user_id: fields._id,
 
                 contract_id: value.contract_id,
-                hf: value.hf,
+                contract_type_id: value.contract_type_id,
+                hf_code: value.hf_code,
 
                 price: price,
                 research: arResearch,
@@ -151,8 +165,8 @@ export default async (req, res) => {
                 work_place: value.work_place,
                 work_experience: value.work_experience,
             }
-            let result = await CWorker.Add ( value )
-*/
+            let result = await CWorker.Add ( fields )
+
             res.status(200).json({
                 code: 0,
                 response: true//result

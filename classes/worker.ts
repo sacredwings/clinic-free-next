@@ -4,7 +4,10 @@ export default class {
 
     static async Add ( fields ) {
         try {
-            let collection = DB.Client.collection('org')
+            fields.contract_id = new DB().ObjectID(fields.contract_id)
+            fields.contract_type_id = new DB().ObjectID(fields.contract_type_id)
+
+            let collection = DB.Client.collection('worker')
             await collection.insertOne(fields)
             return fields
 
@@ -18,7 +21,7 @@ export default class {
         try {
             ids = new DB().arObjectID(ids)
 
-            let collection = DB.Client.collection('user')
+            let collection = DB.Client.collection('worker')
             let result = await collection.find({_id: { $in: ids}}).toArray()
             return result
 
@@ -32,7 +35,7 @@ export default class {
         try {
             fields.contract_id = new DB().ObjectID(fields.contract_id)
 
-            let collection = DB.Client.collection('org')
+            let collection = DB.Client.collection('worker')
             let arFields = {
                 contract_id: fields.contract_id
             }
