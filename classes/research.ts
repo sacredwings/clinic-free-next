@@ -1,36 +1,36 @@
-import {DB} from "social-framework/build/classes/db"
+import {DB} from "social-framework"
 
 export default class {
 
     static async Add ( fields ) {
         try {
-            let collection = DB.Client.collection('org')
+            let collection = DB.Client.collection('research')
             await collection.insertOne(fields)
             return fields
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CHfOrg Add'}, ...err})
+            throw ({...{err: 7001000, msg: 'CResearch Add'}, ...err})
         }
     }
 
-    static async GetById ( fields ) {
+    static async GetById ( ids ) {
         try {
-            fields._id = new DB().ObjectID(fields._id)
+            ids = new DB().arObjectID(ids)
 
-            let collection = DB.Client.collection('org')
-            let result = await collection.find(fields).toArray()
+            let collection = DB.Client.collection('research')
+            let result = await collection.find({_id: { $in: ids}}).toArray()
             return result
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CHfOrg GetById'}, ...err})
+            throw ({...{err: 7001000, msg: 'CResearch GetById'}, ...err})
         }
     }
 
     static async Get ( fields, params ) {
         try {
-            let collection = DB.Client.collection('org')
+            let collection = DB.Client.collection('research')
 
             if (!fields.contract)
                 return await collection.find({}).limit(params.count).skip(params.offset).toArray()
@@ -39,7 +39,7 @@ export default class {
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CHfOrg Get'}, ...err})
+            throw ({...{err: 7001000, msg: 'CResearch Get'}, ...err})
         }
     }
 }

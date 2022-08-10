@@ -49,7 +49,7 @@ export default function ({id}) {
     const List = (arList) => {
         return <div className="list-group">
             {arList.map((list, i) => {
-                let href = `/contract/${id}/worker`
+                let href = `/contract/${list._id}/worker`
                 return <Link href={href} key={i}><a className="list-group-item list-group-item-action">
                     {list.name}
                 </a></Link>

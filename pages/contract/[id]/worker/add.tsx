@@ -4,7 +4,7 @@ import TemplatesMain from "../../../../components/template/main"
 
 export default function ({id}) {
     const formDefault = {
-        hf: '1.1,2.1',
+        hf_code: '1.1,2.1',
 
         first_name: '',
         last_name: '',
@@ -73,11 +73,12 @@ export default function ({id}) {
 
         let result = await axios.post(url, fields)
         console.log(result.data)
+        /*
         if (result.data.code)
             setFormResult(false)
         else
             setFormResult(true)
-
+*/
     }
 
     const Form = () => {
@@ -124,8 +125,8 @@ export default function ({id}) {
                     </div>
                     <div className="row g-3 align-items-center">
                         <div className="col-12">
-                            <label htmlFor="hf" className="col-form-label">Вредные факторы</label>
-                            <input type="text" className="form-control" id="hf" value={form.hf} onChange={onChangeText}/>
+                            <label htmlFor="hf_code" className="col-form-label">Вредные факторы</label>
+                            <input type="text" className="form-control" id="hf_code" value={form.hf_code} onChange={onChangeText}/>
                         </div>
                     </div>
                     <div className="col-12">

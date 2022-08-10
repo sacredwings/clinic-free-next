@@ -1,11 +1,15 @@
 import Joi from "joi"
 import CWorker from "../../../classes/worker"
+import CContract from "../../../classes/contract"
+import CHf from "../../../classes/hf"
+import CResearch from "../../../classes/research"
+import CSpecialist from "../../../classes/specialist"
 
 export default async (req, res) => {
     let value
     try {
         try {
-
+            req.body.hf_code = req.body.hf_code.split(',');
             //схема
             const schema = Joi.object({
                 contract_id: Joi.string().min(24).max(24).allow(null).empty('').default(null),
@@ -60,10 +64,30 @@ export default async (req, res) => {
             let arSpecialist = []
 
             //загрузка договора
-            let hfContract = await CHfContract.GetById ([value.contract_id])
+            let hfContract = await CContract.GetById ([value.contract_id])
             if (!hfContract.length) throw ({code: 30100000, msg: 'Договор не найден'})
             hfContract = hfContract[0]
 
+            //загрузка кодов
+            let arHf = await CHf.GetByCode (value.hf_code)
+
+            //сохраняем каждый из массива вредных факторов
+            for (let hf of arHf) {
+                arResearch = [...arResearch, ...hf.research_id]
+                arSpecialist = [...arSpecialist, ...hf.specialist_id]
+            }
+
+            //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ОБЩИХ
+            console.log(arHf)
+
+            //Оставляем уникальные
+            arResearch = await CResearch.GetById (arResearch)
+            arSpecialist = await CSpecialist.GetById (arSpecialist)
+
+            console.log(arResearch)
+            console.log(arSpecialist)
+
+            /*
             //достаем цену
             if (hfContract.type === 'one') price = hfContract.price
 
@@ -128,7 +152,7 @@ export default async (req, res) => {
                 work_experience: value.work_experience,
             }
             let result = await CWorker.Add ( value )
-
+*/
             res.status(200).json({
                 code: 0,
                 response: true//result
