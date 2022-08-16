@@ -6,25 +6,19 @@ export  default async (req, res) => {
     let value
     try {
         try {
-            //схема
-            const schema = Joi.object({
-                name: Joi.string().min(3).max(255).required(),
-            })
-
-            value = await schema.validateAsync(req.body)
-
-        } catch (err) {
-            console.log(err)
-            throw ({err: 412, msg: 'Неверные параметры'})
-        }
-        try {
             await DbConnect()
 
-            let result = await CHf.Add ( value )
+            let arFields = {
+                count: 1000,
+                offset: 0
+            }
+            let result = await CHf.Get (arFields, {})
 
             res.status(200).json({
                 err: 0,
-                response: true//result
+                response: {
+                    items: result
+                }
             })
         } catch (err) {
             throw ({...{err: 10000000, msg: 'Ошибка формирования результата'}, ...err})

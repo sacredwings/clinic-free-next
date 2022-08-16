@@ -32,10 +32,9 @@ export default class {
         try {
             let collection = DB.Client.collection('hf')
 
-            if (!fields.contract)
-                return await collection.find({}).limit(params.count).skip(params.offset).toArray()
+            //return await collection.find({}).limit(params.count).skip(params.offset).toArray()
 
-            return await collection.aggregate().toArray();
+            return await collection.find({}).toArray()
 
         } catch (err) {
             console.log(err)
@@ -52,6 +51,34 @@ export default class {
         } catch (err) {
             console.log(err)
             throw ({...{err: 7001000, msg: 'CHf GetByCode'}, ...err})
+        }
+    }
+
+    static async Update ( id, fields ) {
+        try {
+            let collection = DB.Client.collection('hf');
+            id = new DB().ObjectID(id)
+
+            let result = collection.updateOne({_id: id}, {$set: fields})
+            return result
+
+        } catch (err) {
+            console.log(err)
+            throw ({...{err: 7001000, msg: 'CHf Update'}, ...err})
+        }
+    }
+
+    static async Delete ( id ) {
+        try {
+            let collection = DB.Client.collection('hf');
+            id = new DB().ObjectID(id)
+
+            let result = collection.deleteOne({_id : id})
+            return result
+
+        } catch (err) {
+            console.log(err)
+            throw ({...{err: 7001000, msg: 'CHf Delete'}, ...err})
         }
     }
 }
