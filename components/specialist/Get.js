@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import axios from "axios"
 
-function Get (props) {
+function Get ({selectHf, module}) {
 
     let [list, setList] = useState([])
     let [listCheck, setListCheck] = useState([])
@@ -21,16 +21,16 @@ function Get (props) {
 
     useEffect(() => {
         (async () => {
-            if (!props.selectHf) return false
-            if (!props.selectHf.specialist_id) return false
+            if (!selectHf) return false
             if (!list) return false
+            setSelectHfId(selectHf._id)
 
-            setSelectHfId(props.selectHf._id)
-            await ListCheck(list, props.selectHf.specialist_id)
+            await ListCheck(list, selectHf.specialist_id)
         })()
-    }, [props.selectHf, list])
+    }, [selectHf, list])
 
     const ListCheck = async (list, hfList) => {
+        if (!hfList) hfList=[]
         let newList = list.map((elementList, i) => {
             for (let hf of hfList) {
                 if (elementList._id === hf)
@@ -69,7 +69,8 @@ function Get (props) {
 
         let arFields = {
             hf_id: selectHfId,
-            id: id
+            id: id,
+            module: module
         }
         let result = axios.post(url, arFields)
     }

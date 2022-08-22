@@ -10,6 +10,7 @@ export default async (req, res) => {
             const schema = Joi.object({
                 hf_id: Joi.string().max(24).max(24).required(),
                 id: Joi.string().max(24).max(24).required(),
+                module: Joi.string().valid('hf', 'ct').required(),
             });
 
             value = await schema.validateAsync(req.body)

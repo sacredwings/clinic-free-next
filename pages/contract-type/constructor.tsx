@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import Hf from '../../components/hf/Get'
+import ContractType from '../../components/contract-type/Get'
 import SpecialistGet from '../../components/specialist/Get'
 import ResearchGet from '../../components/research/Get'
 import TemplatesMain from "../../components/template/main"
@@ -15,12 +15,12 @@ export default function () {
     return <TemplatesMain title={'Конструктор вредных факторов'}>
         <div className="row">
             <div className="col-6">
-                <Hf SelectHf={SelectHf}/>
+                <ContractType SelectHf={SelectHf}/>
             </div>
             <div className="col-6">
-                <SpecialistGet selectHf={selectHf} module={'hf'}/>
+                <SpecialistGet selectHf={selectHf} module={'ct'}/>
                 <hr/>
-                <ResearchGet selectHf={selectHf} module={'hf'}/>
+                <ResearchGet selectHf={selectHf} module={'ct'}/>
             </div>
         </div>
     </TemplatesMain>

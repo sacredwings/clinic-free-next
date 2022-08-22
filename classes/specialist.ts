@@ -102,7 +102,10 @@ export default class {
         try {
             fields.hf_id = new DB().ObjectID(fields.hf_id)
             fields.id = new DB().ObjectID(fields.id)
-            let collection = DB.Client.collection('hf')
+
+            if (fields.module === 'ct')
+                fields.module = 'contract-type'
+            let collection = DB.Client.collection(fields.module)
 
             //поиск
             let arFields = {
