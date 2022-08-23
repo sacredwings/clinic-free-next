@@ -1,6 +1,7 @@
 import Joi from "joi"
 import CWorker from "../../../classes/worker"
 import CContract from "../../../classes/contract"
+import CContractType from "../../../classes/contract-type"
 import CHf from "../../../classes/hf"
 import CResearch from "../../../classes/research"
 import CSpecialist from "../../../classes/specialist"
@@ -69,6 +70,19 @@ export default async (req, res) => {
             if (!hfContract.length) throw ({code: 30100000, msg: 'Договор не найден'})
             hfContract = hfContract[0]
 
+            //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ОБЩИХ
+            //если типы добавлены в контракт
+            if (hfContract.type) {
+                let arType = await CContractType.GetById(hfContract.type) //загрузка типов
+
+                //добавляем в общему массиву
+                for (let hf of arType) {
+                    arResearch = [...arResearch, ...hf.research_id]
+                    arSpecialist = [...arSpecialist, ...hf.specialist_id]
+                }
+            }
+
+            //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ВРЕДНЫХ ФАКТОРОВ
             //загрузка кодов
             let arHf = await CHf.GetByCode (value.hf_code)
 
@@ -78,15 +92,12 @@ export default async (req, res) => {
                 arSpecialist = [...arSpecialist, ...hf.specialist_id]
             }
 
-            //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ОБЩИХ
-            //нет кода
-
             //Оставляем уникальные с прайсами
             arResearch = await CResearch.GetByIdPrice (arResearch)
             arSpecialist = await CSpecialist.GetByIdPrice (arSpecialist)
 
-            console.log(arResearch)
-            console.log(arSpecialist)
+            //console.log(arResearch)
+            //console.log(arSpecialist)
 
             for (let item of arResearch) {
                 if ((item._price) && (item._price[0]))
@@ -97,7 +108,7 @@ export default async (req, res) => {
                     price += item._price[0].price
             }
 
-            console.log(price)
+            //console.log(price)
 
             /*
             //достаем цену
