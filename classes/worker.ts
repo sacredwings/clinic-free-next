@@ -39,9 +39,29 @@ export default class {
             let arFields = {
                 contract_id: fields.contract_id
             }
-            return await collection.find(arFields).limit(fields.count).skip(fields.offset).toArray()
 
-            return await collection.aggregate().toArray();
+            let result = await collection.aggregate([
+                { $match:
+                        {
+                            contract_id: fields.contract_id
+                        }
+                },{ $lookup:
+                        {
+                            from: 'user',
+                            localField: 'user_id',
+                            foreignField: '_id',
+                            as: '_user_id'
+                        }
+                },{
+                    $unwind:
+                        {
+                            path: '$_user_id',
+                            preserveNullAndEmptyArrays: true
+                        }
+                }
+            ]).limit(fields.count).skip(fields.offset).toArray();
+
+            return result
 
         } catch (err) {
             console.log(err)

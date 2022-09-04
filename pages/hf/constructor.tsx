@@ -13,6 +13,7 @@ export default function () {
     }
 
     return <TemplatesMain title={'Конструктор вредных факторов'}>
+        <h1>Вредные факторы</h1>
         <div className="row">
             <div className="col-6">
                 <Hf SelectHf={SelectHf}/>

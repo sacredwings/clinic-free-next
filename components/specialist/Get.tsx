@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react'
 import axios from "axios"
+import Add from "./Add"
 
 function Get ({selectHf, module}) {
 
     let [list, setList] = useState([])
     let [listCheck, setListCheck] = useState([])
-    let [selectHfId, setSelectHfId] = useState(null)
+    let [selectHfId, setSelectHfId] = useState([])
 
-    useEffect(() => {
+    useEffect( () => {
         (async () => {
             await Get()
         })()
@@ -25,7 +26,7 @@ function Get ({selectHf, module}) {
             if (!list) return false
             setSelectHfId(selectHf._id)
 
-            await ListCheck(list, selectHf.research_id)
+            await ListCheck(list, selectHf.specialist_id)
         })()
     }, [selectHf, list])
 
@@ -54,26 +55,25 @@ function Get ({selectHf, module}) {
 
     //список договоров
     const Get = async () => {
-        const url = '/api/research/get';
+        const url = '/api/specialist/get'
 
-        let result = await axios.get(url);
+        let result = await axios.get(url)
 
-        result = result.data;
+        result = result.data
 
         setList(result.response.items)
     }
 
     //список договоров
     const Update = (id) => {
-        const url = '/api/research/update-hf'
+        const url = '/api/specialist/update-hf'
 
         let arFields = {
             hf_id: selectHfId,
             id: id,
             module: module
         }
-
-        let result = axios.post(url, arFields);
+        let result = axios.post(url, arFields)
     }
 
     const OnChange = (id) => {
@@ -107,6 +107,7 @@ function Get ({selectHf, module}) {
 
     return (
         <>
+            <Add />
             {(list.length) ? form(listCheck) : null}
         </>
 

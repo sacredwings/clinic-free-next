@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import axios from "axios"
+import Add from "./Add";
 
-function Get (props) {
+function Get ({SelectHf}) {
 
     let [list, setList] = useState([])
 
@@ -13,7 +14,7 @@ function Get (props) {
 
     //список договоров
     const Get = async () => {
-        const url = '/api/hf/get';
+        const url = '/api/contract-type/get';
 
         let result = await axios.get(url);
 
@@ -25,13 +26,14 @@ function Get (props) {
     const List = (arList) => {
         return <div className="list-group">
             {arList.map((list, i) => {
-                return <button type="button" className="list-group-item list-group-item-action" key={i} onClick={()=>{props.SelectHf(list)}}>{list.name}</button>
+                return <button type="button" className="list-group-item list-group-item-action" key={i} onClick={()=>{SelectHf(list)}}>{list.name}</button>
             })}
         </div>
     }
 
     return (
         <>
+            <Add/>
             {(list.length) ? List(list) : null}
         </>
 

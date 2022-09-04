@@ -13,6 +13,7 @@ export default function () {
     }
 
     return <TemplatesMain title={'Конструктор вредных факторов'}>
+        <h1>Типы договоров</h1>
         <div className="row">
             <div className="col-6">
                 <ContractType SelectHf={SelectHf}/>

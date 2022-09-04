@@ -2,7 +2,7 @@ import Head from "next/head" //заголовок
 import {useEffect, useState} from "react"
 
 import Top from '../menu/top' //верхнее меню
-import "bootstrap/dist/css/bootstrap.min.css" //стили bootstrap
+//import "bootstrap/dist/css/bootstrap.min.css" //стили bootstrap
 
 export default function ({children, title}) {
     useEffect(() => {

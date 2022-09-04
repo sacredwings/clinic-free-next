@@ -1,6 +1,6 @@
 import Joi from "joi"
 import DbConnect from "../../../util/DbConnect"
-//import CWorker from "../../../classes/worker"
+import CWorker from "../../../classes/worker"
 
 export default async function handler(req, res) {
     let value
@@ -27,12 +27,12 @@ export default async function handler(req, res) {
                 offset: value.offset,
                 count: value.count
             }
-            //let result = await CWorker.Get (arFields)
+            let result = await CWorker.Get (arFields)
 
             res.status(200).json({
                 err: 0,
                 response: {
-                    items: []//result
+                    items: result
                 }
             })
         } catch (err) {

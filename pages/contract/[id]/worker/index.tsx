@@ -46,12 +46,20 @@ export default function ({id}) {
         setOrg(result.data.response)
     }
 
+    const ListCode = (arList) => {
+        return arList.map((list, i) => {
+            return <span className="badge text-bg-primary" key={i}>{list}</span>
+        })
+    }
+
     const List = (arList) => {
         return <div className="list-group">
             {arList.map((list, i) => {
-                let href = `/contract/${id}/user`
+                let href = `/contract/${id}/worker`
                 return <Link href={href} key={i}><a className="list-group-item list-group-item-action">
-                    {list.name}
+                    {list._user_id.first_name} {list._user_id.last_name} {list._user_id.patronymic_name}
+                    <br/>
+                    {ListCode(list.hf_code)}
                 </a></Link>
             })}
         </div>
