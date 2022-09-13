@@ -5,6 +5,7 @@ import Add from "./Add"
 function Get ({selectHf, module}) {
 
     let [list, setList] = useState([])
+    let [edit, setEdit] = useState(null)
     let [listCheck, setListCheck] = useState([])
     let [selectHfId, setSelectHfId] = useState([])
 
@@ -38,14 +39,16 @@ function Get ({selectHf, module}) {
                     return {
                         checked: true,
                         _id: elementList._id,
-                        name: elementList.name
+                        name: elementList.name,
+                        _price: elementList._price
                     }
             }
 
             return {
                 checked: false,
                 _id: elementList._id,
-                name: elementList.name
+                name: elementList.name,
+                _price: elementList._price
             }
 
         })
@@ -89,15 +92,95 @@ function Get ({selectHf, module}) {
         Update(id)
     }
 
+    //список договоров
+    const UpdatePrice = () => {
+        const url = '/api/price/add'
+
+        let arFields = {
+            id: edit.id,
+            price: edit.price
+        }
+        setEdit(null)
+        let result = axios.post(url, arFields)
+    }
+
+    const OnChangePrice = (e) => {
+        let id = e.target.id
+        let value = e.target.value
+
+        setEdit({
+            id: id,
+            price: value
+        })
+/*
+        let newList = list.map((item, i)=>{
+            if (item._id === name) {
+                console.log(item._price)
+                if (item._price)
+                    item._price.unshift({
+                        price: value
+                    })
+                else
+                    item._price[0] = {
+                        price: value
+                    }
+            }
+
+            return item
+        })
+        setList(newList)*/
+    }
+
     const form = (arCheck) => {
+
         return <form>
             <div className="mb-3">
                 {arCheck.map((list, i) => {
-                    return <div className="form-check" key={i}>
-                        <input className="form-check-input" type="checkbox" value="" checked={list.checked} onChange={()=>{OnChange(list._id)}}/>
-                        <label className="form-check-label" htmlFor="flexCheckDefault">
-                            {list.name}
-                        </label>
+                    let priceEdit = ''
+                    if ((edit) && (edit.price)) priceEdit = edit.price
+
+                    let price = ''
+                    if ((list._price) && (list._price)) price = list._price.price
+
+                    console.log(list)
+                        /*
+                        return <div className="form-check" key={i}>
+                            <input className="form-check-input" type="checkbox" value="" checked={list.checked} onChange={()=>{OnChange(list._id)}}/>
+                            <label className="form-check-label" htmlFor="flexCheckDefault">
+                                {list.name}
+                            </label>
+                        </div>
+
+                         */
+                    return <div className={'row'} key={i}>
+                            <div className={'col-6'}>
+                                <div className="input-group mb-3">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="checkbox" value="" checked={list.checked} onChange={()=>{OnChange(list._id)}}/>
+                                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                                        {list.name} {price ? price : ''}
+                                    </label>
+                                </div>
+                                </div>
+                            </div>
+
+
+                        {(edit && edit.id === list._id) ? <div className={'col-6'}>
+                                <div className="input-group mb-3">
+                                    <input type="text" className="form-control" aria-label="" value={priceEdit} id={list._id} onChange={OnChangePrice}/>
+                                    <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={UpdatePrice}>Сохранить</button>
+                                </div>
+                            </div> :
+                            <div className={'col-6'}>
+                                <div className="input-group mb-3">
+                                    <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={()=>{setEdit({id: list._id, price: price})}}>Изменить</button>
+                                </div>
+                            </div>
+
+                        }
+
+
+
                     </div>
                 })}
 

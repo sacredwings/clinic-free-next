@@ -50,7 +50,7 @@ export default class {
                 {
                     $sort: { '_price._id': 1 }
                 },
-            ]).toArray();
+            ]).toArray()
             return result
         } catch (err) {
             console.log(err)
@@ -62,9 +62,32 @@ export default class {
         try {
             let collection = DB.Client.collection('research')
 
+            let result = await collection.aggregate([
+                { $lookup:
+                        {
+                            from: 'price',
+                            localField: '_id',
+                            foreignField: 'object_id',
+                            as: '_price',
+                            pipeline: [{
+                                $sort: {  _id: -1 }
+                            },{
+                                $limit: 1
+                            }]
+                        }
+                },{
+                    $unwind:
+                        {
+                            path: '$_price',
+                            preserveNullAndEmptyArrays: true
+                        }
+                }
+            ]).toArray()
+
+            return result
             //return await collection.find({}).limit(params.count).skip(params.offset).toArray()
 
-            return await collection.find({}).toArray()
+            //return await collection.find({}).toArray()
 
         } catch (err) {
             console.log(err)

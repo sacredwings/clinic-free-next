@@ -4,16 +4,19 @@ export default class {
 
     static async Add ( fields ) {
         try {
-            let collection = DB.Client.collection('org')
+            fields.object_id = new DB().ObjectID(fields.object_id)
+
+            let collection = DB.Client.collection('price')
             await collection.insertOne(fields)
             return fields
 
         } catch (err) {
             console.log(err)
-            throw ({...{err: 7001000, msg: 'CHfOrg Add'}, ...err})
+            throw ({...{err: 7001000, msg: 'CPrice Add'}, ...err})
         }
     }
 
+    /*
     static async GetById ( ids ) {
         try {
             ids = new DB().arObjectID(ids)
@@ -41,5 +44,5 @@ export default class {
             console.log(err)
             throw ({...{err: 7001000, msg: 'CHfOrg Get'}, ...err})
         }
-    }
+    }*/
 }
