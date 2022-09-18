@@ -21,7 +21,7 @@ export default function () {
 
                         <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
-                            Организации
+                            Коструктор
                         </a>
 
                         <ul className="dropdown-menu">
@@ -35,9 +35,6 @@ export default function () {
                                 <Link href={'/contract-type/constructor'}><a className="dropdown-item">Типы договоров</a></Link>
                             </li>
                         </ul>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link disabled">Disabled</a>
                     </li>
                 </ul>
             </div>

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import axios from "axios"
 import TemplatesMain from "../../components/template/main"
 
+
 export default function () {
     let [list, setList] = useState([])
     let [request, setRequest] = useState({
@@ -17,6 +18,7 @@ export default function () {
     }, [])
 
     const Get = async (start) => {
+
         const url = '/api/org/get'
         let fields = {
             params: {
@@ -39,9 +41,15 @@ export default function () {
         </div>
     }
 
+    const NoList = () => {
+        return <>
+            Организаций нет
+        </>
+    }
+
     return <TemplatesMain title={'Главная страница'}>
-        <h1>Организации <Link href={`/org/add`}><a className="btn btn-success btn-sm"  role="button">+</a></Link></h1>
-        {(list.length) ? List(list) : null}
+        <h1>Организации <Link href={`/org/add`}><a className="btn btn-success btn-sm"  role="button">+ Добавить организацию</a></Link></h1>
+        {(list.length) ? List(list) : NoList()}
     </TemplatesMain>
 }
 

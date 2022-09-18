@@ -6,9 +6,11 @@ export default async function handler(req, res) {
     let value
     try {
         try {
+            req.query.ids = req.query.ids.split(',')
+
             //схема
             const schema = Joi.object({
-                ids: Joi.string().min(24).max(24).required(),
+                ids: Joi.array().min(1).max(50).items(Joi.string().min(24).max(24)).required()
             })
 
             value = await schema.validateAsync(req.query)
@@ -20,14 +22,11 @@ export default async function handler(req, res) {
         try {
             await DbConnect()
 
-            let fields = {
-                _id: value.ids
-            }
-            //let result = await COrg.GetById (fields)
+            let result = await COrg.GetById (value.ids)
 
             res.status(200).json({
                 code: 0,
-                //response: result[0]
+                response: result
             })
         } catch (err) {
             throw ({...{code: 10000000, msg: 'Ошибка формирования результата'}, ...err})

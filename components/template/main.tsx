@@ -10,6 +10,7 @@ export default function ({children, title}) {
             //подключение bootstrap
             typeof document !== undefined ? require('bootstrap/dist/js/bootstrap') : null
         })()
+
     }, [])
 
     return <>

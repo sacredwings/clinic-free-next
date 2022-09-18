@@ -15,7 +15,7 @@ export default function ({id}) {
     useEffect(() => {
         (async () => {
             await Get(true)
-            //await OrgGetById()
+            await OrgGetById()
         })()
     }, [])
 
@@ -43,7 +43,7 @@ export default function ({id}) {
             }
         }
         let result = await axios.get(url, fields)
-        setOrg(result.data.response)
+        setOrg(result.data.response[0])
     }
 
     const List = (arList) => {
@@ -57,11 +57,16 @@ export default function ({id}) {
         </div>
     }
 
+    const NoList = () => {
+        return <>
+            Договоров нет
+        </>
+    }
+
     return <TemplatesMain title={'Главная страница'}>
-        <h1>{(org) ? org.name : null}</h1>
-        <p><Link href={`/org/${id}/contract/add`}><a className="btn btn-success btn-sm" role="button">Добавить договор</a></Link></p>
-        <p>Договора организаци: </p>
-        {(list.length) ? List(list) : null}
+        <h1>Организация: {(org) ? org.name : null}</h1>
+        <h2>Договора организаци: <Link href={`/org/${id}/contract/add`}><a className="btn btn-success btn-sm" role="button">+ Добавить договор</a></Link></h2>
+        {(list.length) ? List(list) : NoList()}
     </TemplatesMain>
 }
 
