@@ -11,7 +11,8 @@ export default async (req, res) => {
     let value
     try {
         try {
-            req.body.hf_code = req.body.hf_code.split(',');
+            req.body.hf_code = req.body.hf_code.replace(/ /gi, '') //удаление пробелов
+            req.body.hf_code = req.body.hf_code.split(',') //в массив
             //схема
             const schema = Joi.object({
                 contract_id: Joi.string().min(24).max(24).allow(null).empty('').default(null),
@@ -108,58 +109,49 @@ export default async (req, res) => {
                     price += item._price[0].price
             }
 
-            //console.log(price)
-
-            /*
-            //достаем цену
-            if (hfContract.type === 'one') price = hfContract.price
-
-            let arHf = await CHf.GetByCode (value.hf)
-
-            for (let hf of arHf) {
-                arResearch = [...arResearch, ...hf.research_id]
-                arSpecialist = [...arSpecialist, ...hf.specialist_id]
-            }
-
-            //объединение с базовыми из контракта
-            arResearch = [...arResearch, ...hfContract.research_id]
-
-            arResearch = await CHfResearch.GetById (arResearch)
-            arSpecialist = await CHfSpecialist.GetById (arSpecialist)
-*/
-
-            let fields = {
+            //поиск пользователя среди существующих
+            let arFields = {
                 first_name: value.first_name,
                 last_name: value.last_name,
                 patronymic_name: value.patronymic_name,
-
-                man: value.man,
-
-                date_birth: value.date_birth,
-
-                oms_policy_number: value.oms_policy_number,
-                snils: value.snils,
-
-                region: value.region,
-                city: value.city,
-                street: value.street,
-                house: value.house,
-                housing: value.housing,
-                apt: value.apt,
-                building: value.building,
-
-                passport_serial: value.passport_serial,
-                passport_number: value.passport_number,
-                passport_date: value.passport_date,
-
-                passport_issued_by: value.passport_issued_by,
-                phone: value.phone,
-                phone_additional: value.phone_additional,
+                date_birth: value.date_birth
             }
-            let user = await CUser.Add ( fields )
+            let searchUser = await CUser.GetByFields(arFields)
 
-            fields = {
-                user_id: fields._id,
+            if (!searchUser) {
+                arFields = {
+                    first_name: value.first_name,
+                    last_name: value.last_name,
+                    patronymic_name: value.patronymic_name,
+
+                    man: value.man,
+
+                    date_birth: value.date_birth,
+
+                    oms_policy_number: value.oms_policy_number,
+                    snils: value.snils,
+
+                    region: value.region,
+                    city: value.city,
+                    street: value.street,
+                    house: value.house,
+                    housing: value.housing,
+                    apt: value.apt,
+                    building: value.building,
+
+                    passport_serial: value.passport_serial,
+                    passport_number: value.passport_number,
+                    passport_date: value.passport_date,
+
+                    passport_issued_by: value.passport_issued_by,
+                    phone: value.phone,
+                    phone_additional: value.phone_additional,
+                }
+                await CUser.Add ( arFields )
+            }
+
+            arFields = {
+                user_id: searchUser ? searchUser._id : fields._id,
 
                 contract_id: value.contract_id,
                 contract_type_id: value.contract_type_id,
@@ -176,7 +168,7 @@ export default async (req, res) => {
                 work_place: value.work_place,
                 work_experience: value.work_experience,
             }
-            let result = await CWorker.Add ( fields )
+            let result = await CWorker.Add ( arFields )
 
             res.status(200).json({
                 code: 0,

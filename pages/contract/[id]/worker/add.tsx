@@ -73,12 +73,12 @@ export default function ({id}) {
 
         let result = await axios.post(url, fields)
         console.log(result.data)
-        /*
+
         if (result.data.code)
             setFormResult(false)
         else
             setFormResult(true)
-*/
+
     }
 
     const Form = () => {

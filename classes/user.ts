@@ -28,6 +28,18 @@ export default class {
         }
     }
 
+    static async GetByFields ( fields ) {
+        try {
+            let collection = DB.Client.collection('user')
+            let result = await collection.findOne(fields)
+            return result
+
+        } catch (err) {
+            console.log(err)
+            throw ({...{err: 7001000, msg: 'CUser GetByFields'}, ...err})
+        }
+    }
+
     static async Get ( fields ) {
         try {
             let collection = DB.Client.collection('user')
