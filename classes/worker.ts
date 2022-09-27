@@ -22,7 +22,26 @@ export default class {
             ids = new DB().arObjectID(ids)
 
             let collection = DB.Client.collection('worker')
-            let result = await collection.find({_id: { $in: ids}}).toArray()
+            let result = await collection.aggregate([
+                { $match:
+                        {
+                            _id: { $in: ids }
+                        }
+                },{ $lookup:
+                        {
+                            from: 'user',
+                            localField: 'user_id',
+                            foreignField: '_id',
+                            as: '_user_id'
+                        }
+                },{
+                    $unwind:
+                        {
+                            path: '$_user_id',
+                            preserveNullAndEmptyArrays: true
+                        }
+                }
+            ]).toArray()
             return result
 
         } catch (err) {

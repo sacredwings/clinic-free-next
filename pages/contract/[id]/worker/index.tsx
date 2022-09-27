@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import Link from 'next/link'
 import axios from "axios"
 import TemplatesMain from "../../../../components/template/main"
-import contract from "../../../../classes/contract";
 
 export default function ({id}) {
     let [list, setList] = useState([])
@@ -51,18 +50,36 @@ export default function ({id}) {
             return <span className="badge text-bg-primary" key={i}>{list}</span>
         })
     }
+    const ListPrint = (worker_id) => {
+        return <div className="btn-group-vertical" role="group" aria-label="Vertical button group">
+            <div className="btn-group" role="group">
+                <button type="button" className="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i className="fa-solid fa-print"></i>
+                </button>
+                <ul className="dropdown-menu">
+                    <li>
+                        <a href={`/contract/${worker_id}/worker/pdf/zakl_med_osmontra`} className="dropdown-item" target="_blank">Закл. мед. осмотра</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    }
 
     const List = (arList) => {
-        return <div className="list-group">
+        return <ol className="list-group list-group-numbered">
             {arList.map((list, i) => {
-                let href = `/contract/${id}/worker`
-                return <Link href={href} key={i}><a className="list-group-item list-group-item-action">
-                    {list._user_id.first_name} {list._user_id.last_name} {list._user_id.patronymic_name}
-                    <br/>
-                    {ListCode(list.hf_code)}
-                </a></Link>
+                //let href = `/contract/${id}/worker`
+                return <li className="list-group-item d-flex justify-content-between align-items-start" key={i}>
+                    <div className="ms-2 me-auto">
+                        <div className="fw-bold">{list._user_id.first_name} {list._user_id.last_name} {list._user_id.patronymic_name}</div>
+                        {ListCode(list.hf_code)}
+                    </div>
+                    {ListPrint(list._id)}
+                </li>
             })}
-        </div>
+        </ol>
     }
 
     return <TemplatesMain title={'Главная страница'}>
