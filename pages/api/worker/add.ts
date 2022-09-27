@@ -109,6 +109,7 @@ export default async (req, res) => {
                     price += item._price[0].price
             }
 
+
             //поиск пользователя среди существующих
             let arFields = {
                 first_name: value.first_name,
@@ -151,7 +152,7 @@ export default async (req, res) => {
             }
 
             arFields = {
-                user_id: searchUser ? searchUser._id : fields._id,
+                user_id: searchUser ? searchUser._id : arFields._id,
 
                 contract_id: value.contract_id,
                 contract_type_id: value.contract_type_id,

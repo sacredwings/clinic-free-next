@@ -89,7 +89,6 @@ const GetById = async (id) => {
 export async function getServerSideProps ({query, req, res}) {
 
     let worker = await GetById(query.id)
-    console.log(worker)
     let buffer = await componentToPDFBuffer(Page(worker.items[0]))
 
     // with this header, your browser will prompt you to download the file

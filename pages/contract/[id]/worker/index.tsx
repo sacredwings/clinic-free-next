@@ -75,6 +75,10 @@ export default function ({id}) {
                     <div className="ms-2 me-auto">
                         <div className="fw-bold">{list._user_id.first_name} {list._user_id.last_name} {list._user_id.patronymic_name}</div>
                         {ListCode(list.hf_code)}
+                        <br/>
+                        <Link href={`/worker/${list._id}`}>
+                            <a>Подробно...</a>
+                        </Link>
                     </div>
                     {ListPrint(list._id)}
                 </li>
