@@ -5,6 +5,7 @@ export default class {
     static async Add ( fields ) {
         try {
             fields.org_id = new DB().ObjectID(fields.org_id)
+            fields.contract_type_ids = new DB().arObjectID(fields.contract_type_ids)
 
             let collection = DB.Client.collection('contract')
             await collection.insertOne(fields)
