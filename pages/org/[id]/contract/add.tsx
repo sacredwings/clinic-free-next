@@ -37,15 +37,6 @@ export default function ({id}) {
         setForm(prev => (formDefault))
     }
 
-    //список типов договоров
-    const GetTypeContract = async () => {
-        const url = '/api/contract-type/get'
-
-        let result = await axios.get(url)
-
-        setContractTypeList(result.data.response.items)
-    }
-
     const onFormSubmit = async (e) => {
         e.preventDefault() // Stop form submit
 
@@ -63,6 +54,15 @@ export default function ({id}) {
         else
             setFormResult(true)
 
+    }
+
+    //список типов договоров
+    const GetTypeContract = async () => {
+        const url = '/api/contract-type/get'
+
+        let result = await axios.get(url)
+
+        setContractTypeList(result.data.response.items)
     }
 
     const OnChangeCheck = (id) => {

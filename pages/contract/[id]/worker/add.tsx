@@ -17,8 +17,6 @@ export default function ({id}) {
         oms_policy_number: null,
         snils: null,
 
-        dogovor_type: 0,
-
         region: null,
         city: null,
         street: null,
@@ -44,9 +42,17 @@ export default function ({id}) {
     }
 
     let [form, setForm] = useState(formDefault)
+    let [formContractType, setFormContractType] = useState([]) //для формы
+    let [contractTypeList, setContractTypeList] = useState([])
     let [formResult, setFormResult] = useState(null)
 
     //const { paramsId } = useParams()
+
+    useEffect(() => {
+        (async () => {
+            await GetTypeContract()
+        })()
+    }, [])
 
     const onChangeText = (e) => {
         let name = e.target.id;
@@ -69,6 +75,7 @@ export default function ({id}) {
 
         //добавляем поля
         let fields = form
+        if (formContractType) fields.contract_type_ids = formContractType
         fields.contract_id = id
 
         let result = await axios.post(url, fields)
@@ -81,6 +88,47 @@ export default function ({id}) {
 
     }
 
+    //список типов договоров
+    const GetTypeContract = async () => {
+        const url = '/api/contract-type/get'
+
+        let result = await axios.get(url)
+
+        setContractTypeList(result.data.response.items)
+    }
+
+    const OnChangeCheck = (id) => {
+        let list = []
+        let newListCheck = contractTypeList.map((element, i) => {
+            if (element._id === id)
+                element.checked = !element.checked
+
+            if (element.checked) list.push(element._id)
+            return element
+        })
+        setContractTypeList(newListCheck)
+        setFormContractType(list)
+        //Update(id)
+    }
+
+    const FormCheck = () => {
+        return <div className="mb-3 form-check">
+            <br/>
+            <label htmlFor="date_from" className="col-sm-2 col-form-label">Тип договора</label>
+            <div>
+                {contractTypeList.map((item, i)=>{
+                    return <div className="form-check" key={i}>
+                        <input className="form-check-input" type="checkbox" onChange={()=>{OnChangeCheck(item._id)}}/>
+                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                            {item.name}
+                        </label>
+                    </div>
+                })}
+
+            </div>
+        </div>
+    }
+
     const Form = () => {
         return <form onSubmit={onFormSubmit} className="p-3">
             <div className="card m-3">
@@ -88,6 +136,7 @@ export default function ({id}) {
                 <div className="card-header">Новый сотрудник</div>
                 <div className="card-body">
                     {(formResult === false) ? AddErr() : null}
+
                     <div className="row g-3 align-items-center">
                         <div className="col-4">
                             <label htmlFor="last_name" className="col-form-label">Фамилия</label>
@@ -102,7 +151,8 @@ export default function ({id}) {
                             <input type="text" className="form-control" id="patronymic_name" value={form.patronymic_name} onChange={onChangeText}/>
                         </div>
                     </div>
-                    <div className="row g-3 align-items-center">
+
+                    <div className="row g-4 align-items-center">
                         <div className="col-3">
                             <label htmlFor="man" className="col-form-label">Пол</label>
                             <select className="form-select" id="man" aria-label="">
@@ -123,19 +173,18 @@ export default function ({id}) {
                             <input type="text" className="form-control" id="snils" value={form.snils} onChange={onChangeText}/>
                         </div>
                     </div>
+
+                    {/*
                     <div className="row g-3 align-items-center">
                         <div className="col-12">
                             <label htmlFor="hf_code" className="col-form-label">Вредные факторы</label>
                             <input type="text" className="form-control" id="hf_code" value={form.hf_code} onChange={onChangeText}/>
                         </div>
                     </div>
-                    <div className="col-12">
-                        <label htmlFor="man" className="col-form-label">Договор</label>
-                        <select className="form-select" id="man" aria-label="">
-                            <option defaultValue="0">Предварительный</option>
-                            <option value="1">Периодический</option>
-                        </select>
-                    </div>
+                    */}
+
+                    {FormCheck()}
+
                     <br/>
                     <h6 className="card-title text-center">Адрес</h6>
                     <br/>
