@@ -9,7 +9,8 @@ export default async (req, res) => {
             //схема
             const schema = Joi.object({
                 id: Joi.string().min(24).max(24).required(),
-                name: Joi.string().min(1).max(255).required(),
+                code: Joi.string().min(1).max(255).required(),
+                name: Joi.string().min(3).max(255).required(),
             });
 
             value = await schema.validateAsync(req.body)
@@ -22,9 +23,10 @@ export default async (req, res) => {
             await DbConnect()
 
             let arFields = {
+                code: value.code,
                 name: value.name
             }
-            let result = await CHf.Update ( value._id, arFields )
+            let result = await CHf.Update ( value.id, arFields )
 
             res.status(200).json({
                 err: 0,

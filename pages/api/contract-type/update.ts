@@ -24,7 +24,7 @@ export default async (req, res) => {
             let arFields = {
                 name: value.name
             }
-            let result = await CContractType.Update ( value._id, arFields )
+            let result = await CContractType.Update ( value.id, arFields )
 
             res.status(200).json({
                 err: 0,

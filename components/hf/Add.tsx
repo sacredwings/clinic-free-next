@@ -4,6 +4,7 @@ import Modal from '../modal'
 
 export default function Add () {
     const [modalShow, setModalShow] = useState(false) //модальное окно
+    const [form, setForm] = useState({}) //модальное окно
 
     const handleModalClose = () => {
         setModalShow(false)
@@ -13,6 +14,28 @@ export default function Add () {
         setModalShow(true)
     }
 
+    const onChangeText = (e) => {
+        let name = e.target.id;
+        let value = e.target.value;
+
+        setForm(prev => ({
+            ...prev, [name]: value
+        }))
+    }
+
+    const OnClickAdd = async (e) => {
+        e.preventDefault()
+
+        const url = '/api/hf/add'
+
+        let result = await axios.post(url, form);
+
+        result = result.data
+
+        //setList(result.response.items)
+        handleModalClose()
+    }
+
     function ModalWindow() {
         let modalContent = <>
             <div className="modal-header">
@@ -20,7 +43,19 @@ export default function Add () {
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleModalClose}></button>
             </div>
             <div className="modal-body">
-
+                <form onSubmit={OnClickAdd}>
+                    <div className="mb-3">
+                        <label htmlFor="name" className="form-label">Код</label>
+                        <input type="text" className="form-control" id="code" aria-describedby="nameHelp" onChange={onChangeText}/>
+                        <div id="nameHelp" className="form-text"></div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="name" className="form-label">Название</label>
+                        <input type="text" className="form-control" id="name" aria-describedby="nameHelp" onChange={onChangeText}/>
+                        <div id="nameHelp" className="form-text"></div>
+                    </div>
+                    <button type="submit" className="btn btn-primary">Добавить</button>
+                </form>
             </div>
         </>
         return Modal({
@@ -30,9 +65,7 @@ export default function Add () {
     }
 
     return <div className={'Add'}>
-        <div className="d-grid gap-2">
-            <button className="btn btn-success" type="button" onClick={OnClick}> + Добавить</button>
-        </div>
+        <button className="btn btn-success btn-sm" type="button" onClick={OnClick}> + Добавить вредный фактор</button>
         {ModalWindow()}
     </div>
 }

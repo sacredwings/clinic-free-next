@@ -8,6 +8,7 @@ export  default async (req, res) => {
         try {
             //схема
             const schema = Joi.object({
+                code: Joi.string().min(1).max(255).required(),
                 name: Joi.string().min(3).max(255).required(),
             })
 

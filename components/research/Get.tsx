@@ -9,7 +9,7 @@ function Get ({selectHf, module}) {
     let [listCheck, setListCheck] = useState([])
     let [selectHfId, setSelectHfId] = useState([])
 
-    //загрузка спистка
+    //загрузка списка
     useEffect(() => {
         (async () => {
             await Get()

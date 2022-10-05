@@ -27,7 +27,7 @@ export default async (req, res) => {
             let arFields = {
                 name: value.name
             }
-            let result = await CResearch.Update ( value._id, arFields )
+            let result = await CResearch.Update ( value.id, arFields )
 
             //меняется цена если есть
             if (value.price) {

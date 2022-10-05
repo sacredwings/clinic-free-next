@@ -2,6 +2,7 @@ import Joi from "joi"
 import DbConnect from "../../../util/DbConnect"
 import CPrice from "../../../classes/price"
 
+/*
 export default async function handler(req, res) {
     let value
     try {
@@ -47,3 +48,5 @@ export const config = {
         },
     },
 }
+
+ */

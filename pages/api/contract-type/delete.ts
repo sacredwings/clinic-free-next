@@ -20,7 +20,7 @@ export default async (req, res) => {
         try {
             await DbConnect()
 
-            let result = await CContractType.Delete ( value._id )
+            let result = await CContractType.Delete ( value.id )
 
             res.status(200).json({
                 err: 0,
