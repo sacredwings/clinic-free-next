@@ -44,12 +44,20 @@ export default class {
                             from: 'price',
                             localField: '_id',
                             foreignField: 'object_id',
-                            as: '_price'
+                            as: '_price',
+                            pipeline: [{
+                                $sort: {  _id: -1 }
+                            },{
+                                $limit: 1
+                            }]
                         }
-                },
-                {
-                    $sort: { '_price._id': 1 }
-                },
+                },{
+                    $unwind:
+                        {
+                            path: '$_price',
+                            preserveNullAndEmptyArrays: true
+                        }
+                }
             ]).toArray()
             return result
         } catch (err) {

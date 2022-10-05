@@ -60,9 +60,7 @@ export default function Add () {
     }
 
     return <div className={'Add'}>
-        <div className="d-grid gap-2">
-            <button className="btn btn-success" type="button" onClick={OnClickModalShow}> + Добавить</button>
-        </div>
+        <button className="btn btn-success btn-sm" type="button" onClick={OnClickModalShow}> + Добавить специалиста</button>
         {ModalWindow()}
     </div>
 }
