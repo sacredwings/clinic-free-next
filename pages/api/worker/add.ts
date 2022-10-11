@@ -16,7 +16,7 @@ export default async (req, res) => {
             //схема
             const schema = Joi.object({
                 contract_id: Joi.string().min(24).max(24).allow(null).empty('').default(null),
-                contract_type_ids: Joi.array().min(1).max(10).items(Joi.string().min(24).max(24)).allow(null).empty('').default(null),
+                contract_type_ids: Joi.array().min(0).max(10).items(Joi.string().min(24).max(24)).allow(null).empty('').default(null),
                 hf_code: Joi.array().min(1).max(100).items(Joi.string().min(1).max(20)).allow(null).empty('').default(null),
 
                 first_name: Joi.string().min(1).max(255).required(),
@@ -71,17 +71,23 @@ export default async (req, res) => {
             if (!hfContract.length) throw ({code: 30100000, msg: 'Договор не найден'})
             hfContract = hfContract[0]
 
-            //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ОБЩИХ
+            //console.log(hfContract)
+
+            //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ОБЩИХ указанных в контракте
             //если типы добавлены в контракт
-            if (hfContract.type) {
-                let arType = await CContractType.GetById(hfContract.type) //загрузка типов
+            if (hfContract.contract_type_ids) {
+                //let arType = await CContractType.GetById(hfContract.type) //загрузка типов
 
                 //добавляем в общему массиву
-                for (let hf of arType) {
-                    arResearch = [...arResearch, ...hf.research_id]
-                    arSpecialist = [...arSpecialist, ...hf.specialist_id]
+                for (let contract_type of hfContract._contract_type_ids) {
+
+                    arResearch = [...arResearch, ...contract_type.research_id]
+                    arSpecialist = [...arSpecialist, ...contract_type.specialist_id]
                 }
             }
+
+            //console.log(arResearch)
+            //console.log(arSpecialist)
 
             //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ВРЕДНЫХ ФАКТОРОВ
             //загрузка кодов
@@ -108,7 +114,6 @@ export default async (req, res) => {
                 if ((item._price) && (item._price[0]))
                     price += item._price[0].price
             }
-
 
             //поиск пользователя среди существующих
             let arFields = {

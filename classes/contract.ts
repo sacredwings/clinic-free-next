@@ -22,7 +22,21 @@ export default class {
             ids = new DB().arObjectID(ids)
 
             let collection = DB.Client.collection('contract')
-            let result = await collection.find({_id: { $in: ids}}).toArray()
+            let arAggregate = [{
+                $match: {_id: { $in: ids}},
+
+            },{
+                $lookup:
+                    {
+                        from: 'contract-type',
+                        localField: 'contract_type_ids',
+                        foreignField: '_id',
+                        as: '_contract_type_ids'
+                    }
+            }]
+
+            let result = await collection.aggregate(arAggregate).toArray()
+            //let result = await collection.find({_id: { $in: ids}}).toArray()
             return result
 
         } catch (err) {

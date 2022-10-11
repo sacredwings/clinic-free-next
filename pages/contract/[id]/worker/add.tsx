@@ -10,7 +10,7 @@ export default function ({id}) {
         last_name: '',
         patronymic_name: '',
 
-        man: 1,
+        man: '1',
 
         date_birth: null,
 
@@ -54,9 +54,13 @@ export default function ({id}) {
         })()
     }, [])
 
+    useEffect(() => {
+        console.log(form)
+    }, [form])
+
     const onChangeText = (e) => {
-        let name = e.target.id;
-        let value = e.target.value;
+        let name = e.target.id
+        let value = e.target.value
 
         setForm(prev => ({
             ...prev, [name]: value
@@ -81,11 +85,12 @@ export default function ({id}) {
         let result = await axios.post(url, fields)
         console.log(result.data)
 
+        /*
         if (result.data.code)
             setFormResult(false)
         else
             setFormResult(true)
-
+*/
     }
 
     //список типов договоров
@@ -111,6 +116,17 @@ export default function ({id}) {
         //Update(id)
     }
 
+    const Age = (date) => {
+        let today = new Date()
+        let birthDate = new Date(date)
+        let age = today.getFullYear() - birthDate.getFullYear()
+        let m = today.getMonth() - birthDate.getMonth()
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--
+        }
+        return age
+    }
+
     const FormCheck = () => {
         return <div className="mb-3 form-check">
             <br/>
@@ -125,6 +141,33 @@ export default function ({id}) {
                     </div>
                 })}
 
+            </div>
+        </div>
+    }
+
+    const FormCheckContract = () => {
+        return <div className="mb-3 form-check">
+            <div>
+                <div className="form-check">
+                    <input className="form-check-input" type="checkbox"/>
+                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                        УЗИ
+                    </label>
+                </div>
+                {((form.man === '0') && (Age(form.date_birth) >= 40)) ?
+                    <div className="form-check">
+                        <input className="form-check-input" type="checkbox"/>
+                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                            ММГ
+                        </label>
+                    </div> : null
+                }
+                <div className="form-check">
+                    <input className="form-check-input" type="checkbox"/>
+                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                        ФЛГ
+                    </label>
+                </div>
             </div>
         </div>
     }
@@ -155,8 +198,8 @@ export default function ({id}) {
                     <div className="row g-4 align-items-center">
                         <div className="col-3">
                             <label htmlFor="man" className="col-form-label">Пол</label>
-                            <select className="form-select" id="man" aria-label="">
-                                <option defaultValue="1">Мужской</option>
+                            <select className="form-select" id="man" aria-label="" value={form.man} onChange={onChangeText}>
+                                <option value="1" defaultValue="1">Мужской</option>
                                 <option value="0">Женский</option>
                             </select>
                         </div>
@@ -174,6 +217,7 @@ export default function ({id}) {
                         </div>
                     </div>
 
+
                     {/*
                     <div className="row g-3 align-items-center">
                         <div className="col-12">
@@ -183,7 +227,12 @@ export default function ({id}) {
                     </div>
                     */}
 
-                    {FormCheck()}
+                    <br/>
+                    <h6 className="card-title text-center">Дополнительные услуги</h6>
+                    <br/>
+                    {FormCheckContract()}
+
+                    {/*FormCheck()*/}
 
                     <br/>
                     <h6 className="card-title text-center">Адрес</h6>
