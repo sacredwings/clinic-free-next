@@ -11,10 +11,28 @@ export default function () {
             </button>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
-                        <Link href={'/org'}>
-                            <a className="nav-link active" aria-current="page">Организации</a>
-                        </Link>
+                    <li className="nav-item dropdown">
+
+                        <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Проф. осмотр
+                        </a>
+
+                        <ul className="dropdown-menu">
+                            <li>
+                                <Link href={'/org'}>
+                                    <a className="dropdown-item" aria-current="page">Организации</a>
+                                </Link>
+                            </li>
+                            <li>
+                                <hr className="dropdown-divider"/>
+                            </li>
+                            <li>
+                                <Link href={'/proffiz'}>
+                                    <a className="dropdown-item" aria-current="page">Физ. лица</a>
+                                </Link>
+                            </li>
+                        </ul>
                     </li>
 
                     <li className="nav-item dropdown">

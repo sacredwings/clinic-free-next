@@ -6,6 +6,7 @@ import CHf from "../../../classes/hf"
 import CResearch from "../../../classes/research"
 import CSpecialist from "../../../classes/specialist"
 import CUser from "../../../classes/user"
+import DbConnect from "../../../util/DbConnect";
 
 export default async (req, res) => {
     let value
@@ -26,6 +27,10 @@ export default async (req, res) => {
                 man: Joi.number().integer().min(0).max(1).required(),
 
                 date_birth: Joi.date().min('1-1-1900').max('1-1-2030').required(),
+
+                price_ultrasound: Joi.boolean().allow(null).empty('').default(null),
+                price_mammography: Joi.boolean().allow(null).empty('').default(null),
+                price_xray: Joi.boolean().allow(null).empty('').default(null),
 
                 oms_policy_number: Joi.number().integer().min(999999999999999).max(9999999999999999).allow(null).empty('').default(null),
                 snils: Joi.number().integer().min(9999999999).max(99999999999).allow(null).empty('').default(null),
@@ -62,27 +67,47 @@ export default async (req, res) => {
             throw ({code: 412, msg: 'Неверные параметры'})
         }
         try {
+            await DbConnect()
+
             let price = 0
             let arResearch = []
             let arSpecialist = []
 
-            //загрузка договора
-            let hfContract = await CContract.GetById ([value.contract_id])
-            if (!hfContract.length) throw ({code: 30100000, msg: 'Договор не найден'})
-            hfContract = hfContract[0]
+            let hfContract = null
 
-            //console.log(hfContract)
+            //ВЫБОР ТИПОВ ДОГОВОРОВ ИЗ ДОГОВОРА
+            if (value.contract_id) {
+                //загрузка договора
+                hfContract = await CContract.GetById ([value.contract_id])
+                if (!hfContract.length) throw ({code: 30100000, msg: 'Договор не найден'})
+                hfContract = hfContract[0]
 
-            //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ОБЩИХ указанных в контракте
-            //если типы добавлены в контракт
-            if (hfContract.contract_type_ids) {
-                //let arType = await CContractType.GetById(hfContract.type) //загрузка типов
+                //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ОБЩИХ указанных в контракте
+                //если типы добавлены в контракт
+                if (hfContract.contract_type_ids) {
+                    //let arType = await CContractType.GetById(hfContract.type) //загрузка типов
+
+                    //добавляем в общему массиву
+                    for (let contract_type of hfContract._contract_type_ids) {
+
+                        arResearch = [...arResearch, ...contract_type.research_ids]
+                        arSpecialist = [...arSpecialist, ...contract_type.specialist_ids]
+                    }
+                }
+            }
+
+
+            //ВЫБОР ТИПОВ ДОГОВОРОВ ИЗ ПОЛЬЗОВАТЕЛЯ
+            if (value.contract_type_ids) {
+                //Запрос с контрактам
+                let arType = await CContractType.GetById(value.contract_type_ids) //загрузка типов
 
                 //добавляем в общему массиву
-                for (let contract_type of hfContract._contract_type_ids) {
+                for (let contract_type of arType) {
+                    console.log(contract_type)
+                    arResearch = [...arResearch, ...contract_type.research_ids]
+                    arSpecialist = [...arSpecialist, ...contract_type.specialist_ids]
 
-                    arResearch = [...arResearch, ...contract_type.research_id]
-                    arSpecialist = [...arSpecialist, ...contract_type.specialist_id]
                 }
             }
 
@@ -95,8 +120,8 @@ export default async (req, res) => {
 
             //сохраняем каждый из массива вредных факторов
             for (let hf of arHf) {
-                arResearch = [...arResearch, ...hf.research_id]
-                arSpecialist = [...arSpecialist, ...hf.specialist_id]
+                arResearch = [...arResearch, ...hf.research_ids]
+                arSpecialist = [...arSpecialist, ...hf.specialist_ids]
             }
 
             //Оставляем уникальные с прайсами
@@ -160,12 +185,16 @@ export default async (req, res) => {
                 user_id: searchUser ? searchUser._id : arFields._id,
 
                 contract_id: value.contract_id,
-                contract_type_id: value.contract_type_id,
+                contract_type_ids: value.contract_type_ids,
                 hf_code: value.hf_code,
 
                 price: price,
-                research: arResearch,
-                specialist: arSpecialist,
+                price_ultrasound: null,
+                price_mammography: null,
+                price_xray: null,
+
+                research_ids: arResearch,
+                specialist_ids: arSpecialist,
 
                 subdivision: value.subdivision,
                 profession: value.profession,
@@ -174,6 +203,23 @@ export default async (req, res) => {
                 work_place: value.work_place,
                 work_experience: value.work_experience,
             }
+
+            if (hfContract) {
+                //добавление последних полей
+                if ((hfContract.price_ultrasound) && (value.price_ultrasound)) {
+                    arFields.price_ultrasound = hfContract.price_ultrasound
+                    price += hfContract.price_ultrasound
+                }
+                if ((hfContract.price_mammography) && (value.price_mammography)) {
+                    arFields.price_mammography = hfContract.price_mammography
+                    price += hfContract.price_mammography
+                }
+                if ((hfContract.price_xray) && (value.price_xray)) {
+                    arFields.price_xray = hfContract.price_xray
+                    price += hfContract.price_xray
+                }
+            }
+
             let result = await CWorker.Add ( arFields )
 
             res.status(200).json({

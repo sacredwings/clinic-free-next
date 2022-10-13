@@ -4,6 +4,7 @@ export default class {
 
     static async Add ( fields ) {
         try {
+
             let collection = DB.Client.collection('contract-type')
             await collection.insertOne(fields)
             return fields

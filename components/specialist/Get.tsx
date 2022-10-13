@@ -24,7 +24,7 @@ function Get ({selectHf, module}) {
                 if (!list) return false
                 setSelectHfId(selectHf._id)
 
-                await ListCheck(list, selectHf.specialist_id)
+                await ListCheck(list, selectHf.specialist_ids)
             } else {
                 await ListCheck(list, '')
             }

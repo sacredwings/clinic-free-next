@@ -1,5 +1,6 @@
 import Joi from "joi"
 import CResearch from "../../../classes/research"
+import DbConnect from "../../../util/DbConnect";
 
 export  default async (req, res) => {
     let value
@@ -17,6 +18,8 @@ export  default async (req, res) => {
             throw ({code: 412, msg: 'Неверные параметры'})
         }
         try {
+            await DbConnect()
+
             let result = await CResearch.Add ( value )
 
             res.status(200).json({

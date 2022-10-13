@@ -139,22 +139,32 @@ export default class {
             //поиск
             let arFields = {
                 _id: fields.hf_id,
-                specialist_id: fields.id
+                specialist_ids: fields.id
             }
             let result = await collection.findOne(arFields)
 
             if (result)
                 //удаление
-                await collection.update(
+                await collection.updateMany(
                     { _id: fields.hf_id },
-                    { $pull: { 'specialist_id': fields.id} }
+                    { $pull: { specialist_ids: fields.id } }
                 )
-            else
+            else {
+                result = await collection.findOne({_id: fields.hf_id})
+
+                let push = { $push: { specialist_ids: fields.id } }
+                if (result.specialist_ids === null)
+                    push = {
+                        $set: { specialist_ids: [fields.id]}
+                    }
+
                 //добавление
-                await collection.update(
+                await collection.updateOne(
                     { _id: fields.hf_id },
-                    { $push: { 'specialist_id': fields.id} }
+                    push
                 )
+            }
+
 
         } catch (err) {
             console.log(err)

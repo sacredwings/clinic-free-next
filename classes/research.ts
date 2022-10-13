@@ -143,7 +143,7 @@ export default class {
             //поиск
             let arFields = {
                 _id: fields.hf_id,
-                research_id: fields.id
+                research_ids: fields.id
             }
             let result = await collection.findOne(arFields)
 
@@ -151,14 +151,23 @@ export default class {
                 //удаление
                 await collection.update(
                     { _id: fields.hf_id },
-                    { $pull: { 'research_id': fields.id} }
+                    { $pull: { research_ids: fields.id} }
                 )
-            else
+            else {
+                result = await collection.findOne({_id: fields.hf_id})
+
+                let push = { $push: { research_ids: fields.id } }
+                if (result.research_ids === null)
+                    push = {
+                        $set: { research_ids: [fields.id]}
+                    }
+
                 //добавление
-                await collection.update(
+                await collection.updateOne(
                     { _id: fields.hf_id },
-                    { $push: { 'research_id': fields.id} }
+                    push
                 )
+            }
 
         } catch (err) {
             console.log(err)

@@ -1,11 +1,13 @@
 import {DB} from "social-framework"
+import DbConnect from "../../util/DbConnect";
 
 export default async function handler(req, res) {
     let value
     try {
         try {
-            let collection = DB.Client.collection('specialist')
+            await DbConnect()
 
+            let collection = DB.Client.collection('specialist')
             let arSpecialty = [
                 ['Дерматовенеролог'],
                 ['Офтальмолог'],
@@ -2027,7 +2029,7 @@ export default async function handler(req, res) {
             ]
 
             arHarmfulFactor = arHarmfulFactor.map((item, i)=>{
-                return {code: item[0], research_id: item[1], specialist_id: item[2], name: item[3]}
+                return {code: item[0], research_ids: item[1], specialist_ids: item[2], name: item[3]}
             })
 
             let collectionHarmfulFactor = DB.Client.collection('hf')

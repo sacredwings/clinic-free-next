@@ -22,6 +22,7 @@ export default async function handler(req, res) {
         }
         try {
             await DbConnect()
+
             let arFields = {
                 org_id: value.org_id,
                 offset: value.offset,

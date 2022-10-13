@@ -5,7 +5,7 @@ export default class {
     static async Add ( fields ) {
         try {
             fields.contract_id = new DB().ObjectID(fields.contract_id)
-            fields.contract_type_id = new DB().ObjectID(fields.contract_type_id)
+            fields.contract_type_ids = new DB().ObjectID(fields.contract_type_ids)
 
             let collection = DB.Client.collection('worker')
             await collection.insertOne(fields)
@@ -55,9 +55,6 @@ export default class {
             fields.contract_id = new DB().ObjectID(fields.contract_id)
 
             let collection = DB.Client.collection('worker')
-            let arFields = {
-                contract_id: fields.contract_id
-            }
 
             let result = await collection.aggregate([
                 { $match:

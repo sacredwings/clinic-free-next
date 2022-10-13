@@ -37,6 +37,7 @@ export default async function handler(req, res) {
         }
         try {
             await DbConnect()
+
             let result = await COrg.Add ( value )
             console.log(result)
 
