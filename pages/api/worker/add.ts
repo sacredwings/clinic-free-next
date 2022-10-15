@@ -82,16 +82,16 @@ export default async (req, res) => {
                 if (!hfContract.length) throw ({code: 30100000, msg: 'Договор не найден'})
                 hfContract = hfContract[0]
 
+
                 //ЗДЕСЬ ВЫТАСКИВАЕМ ИЗ ОБЩИХ указанных в контракте
                 //если типы добавлены в контракт
                 if (hfContract.contract_type_ids) {
-                    //let arType = await CContractType.GetById(hfContract.type) //загрузка типов
+                    let arType = await CContractType.GetById(hfContract.contract_type_ids) //загрузка типов
 
                     //добавляем в общему массиву
-                    for (let contract_type of hfContract._contract_type_ids) {
-
-                        arResearch = [...arResearch, ...contract_type.research_ids]
-                        arSpecialist = [...arSpecialist, ...contract_type.specialist_ids]
+                    for (let contract_type of arType) {
+                        if (contract_type.research_ids) arResearch = [...arResearch, ...contract_type.research_ids]
+                        if (contract_type.specialist_ids) arSpecialist = [...arSpecialist, ...contract_type.specialist_ids]
                     }
                 }
             }
@@ -104,10 +104,8 @@ export default async (req, res) => {
 
                 //добавляем в общему массиву
                 for (let contract_type of arType) {
-                    console.log(contract_type)
-                    arResearch = [...arResearch, ...contract_type.research_ids]
-                    arSpecialist = [...arSpecialist, ...contract_type.specialist_ids]
-
+                    if (contract_type.research_ids) arResearch = [...arResearch, ...contract_type.research_ids]
+                    if (contract_type.specialist_ids) arSpecialist = [...arSpecialist, ...contract_type.specialist_ids]
                 }
             }
 

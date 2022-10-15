@@ -65,6 +65,7 @@ export default function ({contract_id}) {
         let name = e.target.id
         let value = e.target.value
         if (value === '') value = null
+        if (name === 'hf_code') value = value.replace(/\s/g, "");
 
         setForm(prev => ({
             ...prev, [name]: value
@@ -233,14 +234,12 @@ export default function ({contract_id}) {
                     </div>
 
 
-                    {/*
                     <div className="row g-3 align-items-center">
                         <div className="col-12">
                             <label htmlFor="hf_code" className="col-form-label">Вредные факторы</label>
                             <input type="text" className="form-control" id="hf_code" value={form.hf_code} onChange={onChangeText}/>
                         </div>
                     </div>
-                    */}
 
                     <br/>
                     <h6 className="card-title text-center">Дополнительные услуги</h6>
