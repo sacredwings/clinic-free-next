@@ -1,13 +1,13 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import pdf from 'html-pdf'
 
-const componentToPDFBuffer = (component) => {
+const componentToPDFBuffer = ({component, orientation='portrait'}) => {
     return new Promise((resolve, reject) => {
         let html = renderToStaticMarkup(component)
 
         const options = {
             format: 'A4',
-            orientation: 'portrait',
+            orientation: orientation,
             border: '10mm',
             footer: {
                 height: '10mm',

@@ -89,7 +89,11 @@ const GetById = async (id) => {
 export async function getServerSideProps ({query, req, res}) {
 
     let worker = await GetById(query.id)
-    let buffer = await componentToPDFBuffer(Page(worker.items[0]))
+    let buffer = await componentToPDFBuffer({
+        component: Page(worker.items[0]),
+        orientation: 'portrait'
+
+})
 
     // with this header, your browser will prompt you to download the file
     // without this header, your browse will open the pdf directly
