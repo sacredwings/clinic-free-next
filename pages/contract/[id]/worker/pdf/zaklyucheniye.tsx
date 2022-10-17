@@ -10,22 +10,22 @@ export default function () {
 const Page = (worker) => {
     let styleHeader = {
         margin: 0,
-        fontSize: '22px',
+        fontSize: '16px',
         textAlign: 'center',
-        width: '500px'
+        width: '400px'
     }
 
     let styleH1 = {
         margin: 0,
-        fontSize: '32px',
+        fontSize: '24px',
         textAlign: 'center',
         width: '100%'
     }
 
     let styleText = {
-        paddingBottom: '2em',
+        paddingBottom: '28px',
         margin: 0,
-        fontSize: '1.5em',
+        fontSize: '20px',
         width: '100%'
     }
 
@@ -57,7 +57,7 @@ const Page = (worker) => {
         <br/>
 
         <p style={styleText}>1. Даты выдачи заключения <b>{dateText}</b></p>
-        <p style={styleText}>2. Фамилия, имя, отчество (при наличии) <b>{worker._user_id.first_name} {worker._user_id.last_name} {worker._user_id.patronymic_name}</b></p>
+        <p style={styleText}>2. Фамилия, имя, отчество (при наличии) <b>{worker._user_id.last_name} {worker._user_id.first_name} {worker._user_id.patronymic_name}</b></p>
         <p style={styleText}>3. Дата рождения ________________ 4. Пол _______________</p>
         <p style={styleText}>5. Наименование работодателя</p>
         <p style={styleText}>6. Наименование структурного подразделения работодателя (при наличии)</p>

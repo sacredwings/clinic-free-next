@@ -58,7 +58,7 @@ export default function ({id}) {
                 </button>
                 <ul className="dropdown-menu">
                     <li>
-                        <a href={`/contract/${worker_id}/worker/pdf/zakl_med_osmontra`} className="dropdown-item" target="_blank">Закл. мед. осмотра</a>
+                        <a href={`/contract/${worker_id}/worker/pdf/zaklyucheniye`} className="dropdown-item" target="_blank">Закл. мед. осмотра</a>
                         <a href={`/contract/${worker_id}/worker/pdf/card`} className="dropdown-item" target="_blank">Карта</a>
                         <a href={`/contract/${worker_id}/worker/pdf/vypiska`} className="dropdown-item" target="_blank">Выписка</a>
                     </li>

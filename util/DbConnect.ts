@@ -1,9 +1,10 @@
 import { DB }  from "social-framework"
+import Config  from "../config.json"
 
 export default async function () {
     //конект
     const dbName = 'clinic'
-    const url = 'mongodb://root:A28392839@127.0.0.1:27017/?authSource=admin'
+    const url = Config.server.urlDb
 
     //подключение к базе
     DB.Client = await new DB().Init(url, dbName)
