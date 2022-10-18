@@ -7,7 +7,7 @@ export default function () {
     return <></>
 }
 
-const Page = (worker) => {
+const Page = () => {
     let stylePage1 = {
         position: 'absolute',
         width: '100%'
