@@ -8,9 +8,9 @@ const componentToPDFBuffer = ({component, orientation='portrait'}) => {
         const options = {
             format: 'A4',
             orientation: orientation,
-            border: '5mm',
+            border: '8mm',
             footer: {
-                height: '5mm',
+                height: '8mm',
             },
             type: 'pdf',
             timeout: 30000,

@@ -9,24 +9,28 @@ export default function () {
 
 const Page = (worker) => {
     let styleHeader = {
+        width: '400px',
+        textAlign: 'center',
         margin: 0,
         fontSize: '16px',
-        textAlign: 'center',
-        width: '400px'
     }
 
     let styleH1 = {
-        margin: 0,
-        fontSize: '24px',
         textAlign: 'center',
-        width: '100%'
+        margin: 0,
+        fontSize: '20px',
     }
 
     let styleText = {
-        paddingBottom: '28px',
+        paddingTop: '20px',
         margin: 0,
-        fontSize: '20px',
-        width: '100%'
+        fontSize: '16px',
+    }
+    let styleTextRight = {
+        padding: 0,
+        paddingLeft: '300px',
+        margin: 0,
+        fontSize: '16px',
     }
 
     let date = new Date()
@@ -53,8 +57,7 @@ const Page = (worker) => {
 
         <br/>
         <br/>
-        <br/>
-        <br/>
+
 
         <p style={styleText}>1. Даты выдачи заключения <b>{dateText}</b></p>
         <p style={styleText}>2. Фамилия, имя, отчество (при наличии) <b>{worker._user_id.last_name} {worker._user_id.first_name} {worker._user_id.patronymic_name}</b></p>
@@ -64,12 +67,13 @@ const Page = (worker) => {
         <p style={styleText}>7. Должность (профессия) или вид работ</p>
         <p style={styleText}>8. Наименование вредного производственного фактора ( -ов) и (или) вида работ:</p>
         <p style={styleText}>9. Результаты периодического осмотра:</p>
-
+        <br/>
         <p style={styleText}>Медицинские противопоказания к работе не выявлены:</p>
-
         <p style={styleText}>Группа здоровья: ____________________________________________________________</p>
-        <p style={styleText}>Председатель врачебной комиссии	/</p>
-        <p style={styleText}>(подпись)	(Ф.И.О.)</p>
+        <br/>
+        <p style={styleText}>Председатель врачебной комиссии _______________ / ________________</p>
+        <p style={styleTextRight}>(подпись)	(Ф.И.О.)</p>
+        <br/>
         <p style={styleText}>М.П. ЛПУ</p>
 
   </>
